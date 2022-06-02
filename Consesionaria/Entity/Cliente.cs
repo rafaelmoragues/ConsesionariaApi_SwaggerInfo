@@ -4,6 +4,9 @@ namespace Consesionaria.Entity
 {
     public class Cliente
     {
+        /// <summary>
+        /// Id Identity, primary KEY
+        /// </summary>
         [Key]
         public int Id { get; set; }
 

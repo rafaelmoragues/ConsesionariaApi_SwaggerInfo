@@ -8,6 +8,7 @@ namespace Consesionaria.UOWork
         IClientesRepository ClienteRepo { get; }
         IVentasRepository VentaRepo { get; }
         IVehiculoRepository VehiculoRepo { get; }
+        IUsuarioRepository UsuarioRepo { get; }
         void Save();
     }
 }

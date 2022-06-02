@@ -13,5 +13,6 @@ namespace Consesionaria.Data
         public DbSet<Venta>? Ventas { get; set; }
         public DbSet<Cliente>? Clientes { get; set; }
         public DbSet<Vehiculo>? Vehiculos { get; set; }
+        public DbSet<Usuario>? Usuarios { get; set; }
     }
 }

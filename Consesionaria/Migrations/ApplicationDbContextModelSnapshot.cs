@@ -48,7 +48,7 @@ namespace Consesionaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("Consesionaria.Entity.Vehiculo", b =>
@@ -75,7 +75,7 @@ namespace Consesionaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Vehiculos");
+                    b.ToTable("Vehiculos", (string)null);
                 });
 
             modelBuilder.Entity("Consesionaria.Entity.Venta", b =>
@@ -107,7 +107,7 @@ namespace Consesionaria.Migrations
 
                     b.HasIndex("VehiculoId");
 
-                    b.ToTable("Ventas");
+                    b.ToTable("Ventas", (string)null);
                 });
 
             modelBuilder.Entity("Consesionaria.Entity.Venta", b =>

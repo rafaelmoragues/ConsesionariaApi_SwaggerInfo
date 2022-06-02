@@ -13,6 +13,7 @@ namespace Consesionaria.UOWork
         public IVentasRepository VentaRepo { get; private set; }
 
         public IVehiculoRepository VehiculoRepo { get; private set; }
+        public IUsuarioRepository UsuarioRepo { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -20,6 +21,7 @@ namespace Consesionaria.UOWork
             ClienteRepo = new ClienteRepostory(context);
             VentaRepo = new VentaRepository(context);
             VehiculoRepo = new VehiculoRepository(context);
+            UsuarioRepo = new UsuarioRepository(context);
         }
 
         public void Dispose()
