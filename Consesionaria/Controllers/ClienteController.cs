@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Consesionaria.Entity;
 using Consesionaria.UOWork;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Consesionaria.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase

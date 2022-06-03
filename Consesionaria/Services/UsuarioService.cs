@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Consesionaria.Request;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Consesionaria.Services
 {
@@ -26,29 +27,35 @@ namespace Consesionaria.Services
             if (_uOW.UsuarioRepo.ExisteUsuario(email))
             {
                 UserResponse response = new UserResponse();
+                //traigo el usuario, por el email
                 Usuario user = _uOW.UsuarioRepo.GetByEmail(email);
+                //verifico si el password ingresado es el mismo del usuario en la DB
                 if(!VerificarPassword(password, user.PasswordHash, user.PasswordSalt))
                 {
                     return null;
                 }
+                //aca deberia mappear a un UserResponse
                 response.Email = email;
                 response.Nombre = user.Nombre;
                 response.FechaAlta = user.FechaAlta;
                 response.Id = user.Id;
+                response.Role = user.Role;
+                //Devuelvo la respuesta si esta todo bien
                 return response;
             }
             return null;
         }
         private bool VerificarPassword(string pass, byte[] pHash, byte[] pSalt)
         {
-            using (var hMac = new System.Security.Cryptography.HMACSHA512(pSalt))
+            //hago una encriptacion con la key (psalt)
+            var hMac = new HMACSHA512(pSalt);            
+            var hash = hMac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pass));
+            //comparo el pass de la DB con el que acabo de encriptar
+            for (var i = 0; i < hash.Length; i++)
             {
-                var hash = hMac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pass));
-                for (var i = 0; i < hash.Length; i++)
-                {
-                    if (hash[i] != pHash[i]) return false;
-                }
+                if (hash[i] != pHash[i]) return false;
             }
+            
             return true;
         }
         public UserResponse Registrar(UserRequest user, string password)
@@ -62,6 +69,7 @@ namespace Consesionaria.Services
             usuario.FechaAlta = DateTime.Now;
             usuario.PasswordHash = passwordHash;
             usuario.PasswordSalt = passwordSalt;
+            usuario.Role = Role.Admin;
             _uOW.UsuarioRepo.Insert(usuario);
             _uOW.Save();
             UserResponse response = new UserResponse();
@@ -69,16 +77,18 @@ namespace Consesionaria.Services
             response.Nombre = usuario.Nombre;
             response.FechaAlta = usuario.FechaAlta;
             response.Id = usuario.Id;
+            response.Role = usuario.Role;
             return response;
-
         }
         private void CrearPassHash(string pass, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hMac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hMac.Key;
-                passwordHash = hMac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pass));
-            }
+            //creo una encriptacion
+            var hMac = new HMACSHA512();
+            //le asigno la llave de la encriptacion al passwordSalt
+            passwordSalt = hMac.Key;
+            //Encripto el pass y lo guardo en passwordHash
+            passwordHash = hMac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pass));
+            
             
         }
 
@@ -88,7 +98,8 @@ namespace Consesionaria.Services
             {
                 new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
                 new Claim(JwtRegisteredClaimNames.NameId, usuario.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Name, usuario.Nombre)
+                new Claim(JwtRegisteredClaimNames.Name, usuario.Nombre),
+                new Claim(ClaimTypes.Role, usuario.Role.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
@@ -99,6 +110,8 @@ namespace Consesionaria.Services
                 SigningCredentials = credentials
 
             };
+            var claimsIdentity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var token =tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);

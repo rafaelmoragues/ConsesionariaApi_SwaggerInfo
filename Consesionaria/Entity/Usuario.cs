@@ -13,5 +13,6 @@ namespace Consesionaria.Entity
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTime FechaAlta { get; set; } = DateTime.Now;
+        public Role Role { get; set; }
     }
 }
