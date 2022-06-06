@@ -20,7 +20,7 @@ namespace Consesionaria.Validations
             //capturo el objeto a validar
             var auto = (Vehiculo)validationContext.ObjectInstance;
             //capturo el valor a validar
-            var añoFabricacion = ((DateTime)value!).Year;
+            var añoFabricacion = (int)value!;
 
             if (auto.Marca == "Tesla" && añoFabricacion < Año)
             {
