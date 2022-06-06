@@ -69,7 +69,7 @@ namespace Consesionaria.Services
             usuario.FechaAlta = DateTime.Now;
             usuario.PasswordHash = passwordHash;
             usuario.PasswordSalt = passwordSalt;
-            usuario.Role = Role.Admin;
+            usuario.Role = Role.User;
             _uOW.UsuarioRepo.Insert(usuario);
             _uOW.Save();
             UserResponse response = new UserResponse();

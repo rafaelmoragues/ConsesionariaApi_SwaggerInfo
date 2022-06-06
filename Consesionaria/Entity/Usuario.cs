@@ -7,8 +7,10 @@ namespace Consesionaria.Entity
         [Key]
         public int Id { get; set; }
         [Required]
+        [StringLength(60)]
         public string Nombre { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }

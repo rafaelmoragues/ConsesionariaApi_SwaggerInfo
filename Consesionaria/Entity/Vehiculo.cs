@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Consesionaria.Validations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Consesionaria.Entity
 {
@@ -9,6 +10,7 @@ namespace Consesionaria.Entity
         [Required]
         public string? Marca { get; set; }
         [Required]
+        [TeslaCar(2009)]
         public string? Modelo { get; set; }
         [Required]
         public double Importe { get; set; }

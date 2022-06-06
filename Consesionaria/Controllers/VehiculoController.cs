@@ -9,7 +9,7 @@ namespace Consesionaria.Controllers
     /// <summary>
     /// Servicio para cargar, modificar u obtener vehiculos
     /// </summary>
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class VehiculoController : ControllerBase
