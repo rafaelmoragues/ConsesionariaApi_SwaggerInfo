@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Consesionaria.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase

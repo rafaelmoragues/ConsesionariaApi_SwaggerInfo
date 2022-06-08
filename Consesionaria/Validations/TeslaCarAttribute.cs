@@ -29,5 +29,5 @@ namespace Consesionaria.Validations
 
             return ValidationResult.Success;
         }
-        }
+    }
 }
